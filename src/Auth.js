@@ -49,12 +49,39 @@ class Auth extends Component {
         });
     };
 
-    tryLogout = (event) =>{
+    tryLogout = (event) => {
         firebase.auth().signOut();
 
         var btn = document.getElementById('logout');
         btn.classList.add('hide');
 
+    };
+
+    tryGoogleLogin = (event) => {
+        console.log("gggoel");
+        var provider = new firebase.auth.GoogleAuthProvider();
+
+        var promise = firebase.auth().signInWithPopup(provider);
+
+        promise.then(result => {
+            console.log(result);
+            var user = result.user;
+
+            firebase.database().ref('users/' + user.uid).set({
+                name: user.displayName,
+                email: user.email
+            });
+
+            var error = "Logged successfully," + user.email;
+            this.setState({error: error});
+
+            var btn = document.getElementById('logout');
+            btn.classList.remove('hide');
+
+        }).catch(error => {
+            var error = error.message;
+            this.setState({error: error});
+        });
     };
 
     constructor(props) {
@@ -78,6 +105,7 @@ class Auth extends Component {
         this.tryLogin = this.tryLogin.bind(this);
         this.tryRegister = this.tryRegister.bind(this);
         this.tryLogout = this.tryLogout.bind(this);
+        this.tryGoogleLogin = this.tryGoogleLogin.bind(this);
     }
 
     render() {
@@ -92,6 +120,9 @@ class Auth extends Component {
                     <button onClick={this.tryLogin} type="button"> Login</button>
                     <button onClick={this.tryRegister} type="button"> SignUp</button>
                     <button onClick={this.tryLogout} id="logout" className="hide" type="button"> Logout</button>
+                    <br/>
+                    <button onClick={this.tryGoogleLogin} id="google" className="" type="button"> Sign In with Google
+                    </button>
                 </form>
             </div>
         );
