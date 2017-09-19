@@ -1,5 +1,9 @@
-ReactJs app with firebase Register, Login and Logout.
 
-Clone directory and run command :  npm install
+### ReactJs app with firebase Register, Login and Logout.
 
-once npm gets installed run : npm start 
+Clone directory and run below command
+```sh
+$ cd react-demo
+$ npm install
+$ npm start
+```
